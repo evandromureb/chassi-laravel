@@ -1,0 +1,96 @@
+# Nome do container Docker
+CONTAINER_NAME=laravel-app
+
+# Caminho do diretório do projeto
+PROJECT_DIR=$(shell pwd)
+
+# Caminho do Docker Compose
+DOCKER_COMPOSE=docker-compose
+
+# Comandos para rodar containers
+up:
+	$(DOCKER_COMPOSE) up -d
+
+# Parar os containers
+down:
+	$(DOCKER_COMPOSE) down
+
+# Parar os containers
+downv:
+	$(DOCKER_COMPOSE) down -v
+
+# Construir os containers
+build:
+	$(DOCKER_COMPOSE) build
+
+# Rodar migrations
+migrate:
+	docker exec -it $(CONTAINER_NAME) php artisan migrate
+
+# Rodar os testes
+test:
+	docker exec -it $(CONTAINER_NAME) php artisan test
+
+# Acessar o container
+bash:
+	docker exec -it $(CONTAINER_NAME) bash
+
+# Criar a chave de aplicação
+keygen:
+	docker exec -it $(CONTAINER_NAME) php artisan key:generate
+
+# Instalar dependências via Composer
+composer-install:
+	docker exec -it $(CONTAINER_NAME) composer install
+
+# Instalar dependências via NPM
+npm-install:
+	docker exec -it $(CONTAINER_NAME) npm install
+
+# Rodar o servidor de desenvolvimento
+serve:
+	docker exec -it $(CONTAINER_NAME) php artisan serve --host=0.0.0.0 --port=8000
+
+# Limpar containers, volumes e imagens não utilizados
+clean:
+	docker system prune -f
+
+# Build e up ao mesmo tempo
+build-up: build up
+
+# Executar as migrations e rodar a aplicação
+migrate-serve: migrate serve
+
+# Comandos para instalar laravel
+init:
+	$(DOCKER_COMPOSE) down -v;
+	$(DOCKER_COMPOSE) build;
+	$(DOCKER_COMPOSE) up -d;
+	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/;
+	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/
+	docker exec -it $(CONTAINER_NAME) composer install;
+	docker exec -it $(CONTAINER_NAME) npm install;
+	docker exec -it $(CONTAINER_NAME) cp .env.example .env;
+	docker exec -it $(CONTAINER_NAME) php artisan key:generate;
+	docker exec -it $(CONTAINER_NAME) sleep 10;
+	echo "Aguardando subir o MySQL";
+	docker exec -it $(CONTAINER_NAME) php artisan migrate
+
+# Comando para dar permissões as pastas
+permissions:
+	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache;
+	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache;
+	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/;
+	docker exec -it $(CONTAINER_NAME) chmod -R 777 /var/www/html/;
+
+# Comando para executar o Laravel Pint
+pint:
+	docker exec -it $(CONTAINER_NAME) ./vendor/bin/pint
+
+# Comando para executar o Larastan
+stan:
+	docker exec -it $(CONTAINER_NAME) ./vendor/bin/phpstan
+
+# Comando para atualizar as bibliotecas do sistema e atualizar o Laravel
+updateSystem:
+	docker exec -it $(CONTAINER_NAME) composer update
