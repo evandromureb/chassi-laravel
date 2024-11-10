@@ -66,18 +66,19 @@ init:
 	$(DOCKER_COMPOSE) down -v;
 	$(DOCKER_COMPOSE) build;
 	$(DOCKER_COMPOSE) up -d;
-	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/;
-	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/
+	docker exec -it $(CONTAINER_NAME) git config --global --add safe.directory /var/www/html
+	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache;
+	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache;
 	docker exec -it $(CONTAINER_NAME) composer install;
 	docker exec -it $(CONTAINER_NAME) npm install;
 	docker exec -it $(CONTAINER_NAME) cp .env.example .env;
 	docker exec -it $(CONTAINER_NAME) php artisan key:generate;
 	docker exec -it $(CONTAINER_NAME) sleep 10;
-	echo "Aguardando subir o MySQL";
 	docker exec -it $(CONTAINER_NAME) php artisan migrate
 
 # Comando para dar permissões as pastas
 permissions:
+	docker exec -it $(CONTAINER_NAME) git config --global --add safe.directory /var/www/html
 	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache;
 	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache;
 

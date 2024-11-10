@@ -1,6 +1,10 @@
 # Usando PHP 8.3
 FROM php:8.3-fpm
 
+ARG UID=1000
+ARG GID=1000
+RUN usermod -u $UID www-data && groupmod -g $GID www-data
+
 # Instalar dependências
 RUN apt-get update && apt-get install -y \
     curl \

@@ -3,6 +3,9 @@ services:
     build:
       context: .container/php
       dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
     image: laravel-app:latest
     container_name: laravel-app
     volumes:
