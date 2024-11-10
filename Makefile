@@ -80,8 +80,6 @@ init:
 permissions:
 	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache;
 	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache;
-	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/;
-	docker exec -it $(CONTAINER_NAME) chmod -R 777 /var/www/html/;
 
 # Comando para executar o Laravel Pint
 pint:
