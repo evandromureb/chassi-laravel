@@ -67,8 +67,8 @@ init:
 	$(DOCKER_COMPOSE) build;
 	$(DOCKER_COMPOSE) up -d;
 	docker exec -it $(CONTAINER_NAME) git config --global --add safe.directory /var/www/html
-	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache;
-	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache;
+	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.husky;
+	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.husky;
 	docker exec -it $(CONTAINER_NAME) composer install;
 	docker exec -it $(CONTAINER_NAME) npm install;
 	docker exec -it $(CONTAINER_NAME) cp .env.example .env;
