@@ -5,8 +5,8 @@ if [ $? -ne 0 ]; then
     exit 1;
 fi;
 
- rodar os testes
-php artisan test php
+# rodar os testes
+php artisan test
 if [ $? -ne 0 ]; then
     echo "Ocorreu um problema ao rodar os testes do PHP. Verifique!";
     exit 1;
