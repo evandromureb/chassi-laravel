@@ -1,5 +1,5 @@
 # Nome do container Docker
-CONTAINER_NAME=laravel-app
+CONTAINER_NAME=chassi-laravel
 
 # Caminho do diretório do projeto
 PROJECT_DIR=$(shell pwd)
@@ -35,10 +35,6 @@ test:
 bash:
 	docker exec -it $(CONTAINER_NAME) bash
 
-# Criar a chave de aplicação
-keygen:
-	docker exec -it $(CONTAINER_NAME) php artisan key:generate
-
 # Instalar dependências via Composer
 composer-install:
 	docker exec -it $(CONTAINER_NAME) composer install
@@ -47,19 +43,8 @@ composer-install:
 npm-install:
 	docker exec -it $(CONTAINER_NAME) npm install
 
-# Rodar o servidor de desenvolvimento
-serve:
-	docker exec -it $(CONTAINER_NAME) php artisan serve --host=0.0.0.0 --port=8000
-
-# Limpar containers, volumes e imagens não utilizados
-clean:
-	docker system prune -f
-
 # Build e up ao mesmo tempo
 build-up: build up
-
-# Executar as migrations e rodar a aplicação
-migrate-serve: migrate serve
 
 # Comandos para instalar laravel
 init:
@@ -93,3 +78,7 @@ stan:
 # Comando para atualizar as bibliotecas do sistema e atualizar o Laravel
 updateSystem:
 	docker exec -it $(CONTAINER_NAME) composer update
+
+# Comando para atualizar as bibliotecas do sistema e atualizar o Laravel
+cacheClear:
+	docker exec -it $(CONTAINER_NAME) php artisan optimize:clear

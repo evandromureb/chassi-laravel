@@ -7,18 +7,18 @@ services:
         UID: ${UID:-1000}
         GID: ${GID:-1000}
     image: laravel-app:latest
-    container_name: laravel-app
+    container_name: chassi-laravel
     volumes:
       - ./:/var/www/html
       - ./storage/logs:/var/log/php
     depends_on:
-      - db
+      - mysql
       - redis
       - localstack
 
-  web:
+  nginx:
     image: nginx:latest
-    container_name: laravel-web
+    container_name: chassi-nginx
     ports:
       - "80:80"
     volumes:
@@ -27,9 +27,9 @@ services:
     depends_on:
       - app
 
-  db:
+  mysql:
     image: mysql:8.0
-    container_name: laravel-db
+    container_name: chassi-mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: laravel
@@ -49,22 +49,22 @@ services:
 
   redis:
     image: redis:latest
-    container_name: laravel-redis
+    container_name: chassi-redis
     ports:
       - "6379:6379"
 
   localstack:
     image: localstack/localstack
-    container_name: localstack
+    container_name: chassi-localstack
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock
     ports:
-      - "4566:4566"  # Porta para os serviços simulados da AWS
-      - "4510-4559:4510-4559"  # Intervalo de portas para acesso aos serviços simulados
+      - "4566:4566"
+      - "4510-4559:4510-4559"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     extra_hosts:
-      - "host.docker.internal:host-gateway"  # Para comunicação com a máquina host
+      - "host.docker.internal:host-gateway"
 
 volumes:
   db_data:
