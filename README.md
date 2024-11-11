@@ -7,7 +7,8 @@
 - Nginx
 - Laravel 11+
 - Redis
-- Localstack
+- Localstack - https://app.localstack.cloud/ (login via github)
+- RabbitMQ - http://localhost:15672 (guest - guest)
 
 ## Instalação
 
