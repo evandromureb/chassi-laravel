@@ -79,8 +79,8 @@ init:
 # Comando para dar permissões as pastas
 permissions:
 	docker exec -it $(CONTAINER_NAME) git config --global --add safe.directory /var/www/html
-	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache;
-	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache;
+	docker exec -it $(CONTAINER_NAME) chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.husky;
+	docker exec -it $(CONTAINER_NAME) chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.husky;
 
 # Comando para executar o Laravel Pint
 pint:
